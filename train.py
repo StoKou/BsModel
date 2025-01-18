@@ -13,7 +13,7 @@ from torch.autograd import Variable
 from torch.utils.data import dataloader
 import torchvision
 from tqdm import tqdm
-import tensorboard_logger as tb_logger
+# import tensorboard_logger as tb_logger
 
 import utils
 import datasets
@@ -29,8 +29,8 @@ torch.set_num_threads(8)
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', default = 'fashioniq', help = "data set type")
 parser.add_argument('--name', default = 'toptee', help = "data set type")
-parser.add_argument('--fashioniq_path', default = '/opt/data/private/kevin/data/fashion-iq/') #replace the path
-parser.add_argument('--shoes_path', default = '/opt/data/private/kevin/data/shoes/')
+parser.add_argument('--fashioniq_path', default = './opt/data/private/kevin/data/fashioniq/') #replace the path
+parser.add_argument('--shoes_path', default = './opt/data/private/kevin/data/shoes/')
 
 parser.add_argument('--optimizer', default = 'adam')
 parser.add_argument('--batch_size', type=int, default=32)
@@ -159,7 +159,7 @@ def train(model, optimizer, dataloader,testset, epoch, ema):
             model.logger.update('Le/loss', new_loss.data.item(), img1.size(0))
             model.logger.update('Le/class', loss['class'].data.item(), img1.size(0))
             model.logger.update('Le/sim_MSE', loss['sim_MSE'].data.item(), img1.size(0))
-            model.logger.tb_log(tb_logger, step=model.Eiters)
+            # model.logger.tb_log(tb_logger, step=model.Eiters)
 
             new_loss.backward()
             optimizer.step()
@@ -206,8 +206,8 @@ def train_and_evaluate(model, optimizer, trainset, testset, model_dir, restore_f
             t = test.test(args, model, dataset, args.dataset)
             tests += [(name + ' ' + metric_name, metric_value) for metric_name, metric_value in t]
         logging.info(tests)
-        for metric_name, metric_value in t:
-            tb_logger.log_value(metric_name,metric_value,step=model.Eiters)
+        # for metric_name, metric_value in t:
+        #     tb_logger.log_value(metric_name,metric_value,step=model.Eiters)
 
         print(tests)
         if args.dataset == 'fashioniq':
@@ -240,8 +240,8 @@ if __name__ == '__main__':
 
     if not os.path.exists(args.model_dir):
         os.makedirs(args.model_dir)
-    if os.path.exists(args.model_dir):
-        tb_logger.configure(os.path.join(args.model_dir, 'log'), flush_secs=5)
+    # if os.path.exists(args.model_dir):
+    #     tb_logger.configure(os.path.join(args.model_dir, 'log'), flush_secs=5)
 
     utils.set_logger(os.path.join(args.model_dir, 'train.log'))
     logging.info('Loading the datasets and model...')
