@@ -8,7 +8,7 @@ import random
 
 import numpy as np 
 import torch 
-import torch.optim as optim 
+import torch.optim as optim  
 from torch.autograd import Variable
 from torch.utils.data import dataloader
 import torchvision
